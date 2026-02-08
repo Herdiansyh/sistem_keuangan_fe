@@ -1,70 +1,348 @@
-# Getting Started with Create React App
+# Sistem Keuangan Frontend
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## 📋 Deskripsi
 
-## Available Scripts
+Sistem keuangan frontend yang dibangun dengan React.js untuk menampilkan ringkasan akun dan laporan keuangan perusahaan.
 
-In the project directory, you can run:
+## 🚀 Fitur Utama
 
-### `npm start`
+### 1. **Ringkasan Akun**
+- Menampilkan struktur akun secara hierarkis
+- Filter berdasarkan tipe akun (Asset, Liability, Equity, Revenue, Expense)
+- Expand/collapse untuk melihat detail anak akun
+- Menampilkan saldo awal, total debit, total kredit, dan saldo akhir
+- Counter transaksi untuk setiap akun
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### 2. **Financial Summary Cards**
+- Total Assets (Aset perusahaan)
+- Total Liabilities (Kewajiban perusahaan)
+- Total Equity (Modal perusahaan)
+- Net Income (Pendapatan bersih)
+- Data diambil dari backend API
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### 3. **Top Accounts**
+- Menampilkan akun dengan saldo tertinggi
+- Informasi kode, nama, tipe, dan saldo
+- Batasan maksimal 10 akun untuk performance
 
-### `npm test`
+## 🛠️ Teknologi
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- **Frontend:** React 18 dengan Hooks
+- **Styling:** Tailwind CSS
+- **UI Components:** shadcn/ui
+- **Icons:** Lucide React
+- **HTTP Client:** Axios
+- **Backend API:** Laravel REST API
 
-### `npm run build`
+## 📁 Struktur File
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```
+src/
+├── pages/
+│   ├── AccountSummary.jsx     # Halaman utama ringkasan akun
+│   ├── Dashboard.jsx         # Dashboard dengan summary cards
+│   ├── Accounts.jsx          # Manajemen akun
+│   └── Transactions.jsx     # Manajemen transaksi
+├── services/
+│   └── api.js              # API client dengan axios
+├── components/
+│   ├── ui/                 # shadcn/ui components
+│   └── ui/                 # Custom components
+└── utils/
+    └── formatters.js       # Utility functions
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## 🚀 Cara Menjalankan
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Prerequisites
+- Node.js 16+ 
+- npm atau yarn
+- Backend Laravel API yang berjalan di `http://localhost:8000/api`
 
-### `npm run eject`
+### Installation
+```bash
+# Clone repository
+git clone <repository-url>
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+# Install dependencies
+cd sistem_keuangan_fe
+npm install
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+# Setup environment
+cp .env.example .env
+# Edit .env dengan konfigurasi API URL
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+# Jalankan development server
+npm start
+```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+### Environment Variables
+```env
+REACT_APP_API_URL=http://localhost:8000/api
+```
 
-## Learn More
+## 🔧 Konfigurasi API
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### Endpoints yang Digunakan
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+#### Account Summary
+- `GET /api/account-summary` - Get all account summaries
+- `GET /api/account-summary/{id}` - Get specific account summary
+- `GET /api/account-summary/financial` - Get financial summary
+- `GET /api/account-summary/top` - Get top accounts by balance
+- `GET /api/account-summary/{id}/balance` - Get account balance
 
-### Code Splitting
+### Request/Response Format
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+#### Get Account Summary
+```javascript
+// Request
+GET /api/account-summary?account_type=asset&show_inactive=false
 
-### Analyzing the Bundle Size
+// Response
+{
+  "success": true,
+  "message": "Ringkasan akun berhasil diambil",
+  "data": [
+    {
+      "id": 1,
+      "code": "101",
+      "name": "Kas",
+      "type": "asset",
+      "opening_balance": 1000000,
+      "total_debit": 500000,
+      "total_credit": 200000,
+      "balance": 1300000,
+      "total_balance": 1300000,
+      "children": [...],
+      "transaction_count": 15
+    }
+  ]
+}
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+#### Get Financial Summary
+```javascript
+// Request
+GET /api/account-summary/financial?start_date=2026-01-01&end_date=2026-12-31
 
-### Making a Progressive Web App
+// Response
+{
+  "success": true,
+  "message": "Ringkasan keuangan berhasil diambil",
+  "data": {
+    "total_debit": 15000000,
+    "total_credit": 12000000,
+    "net_amount": 3000000,
+    "total_assets": 85000000,
+    "total_liabilities": 25000000,
+    "total_equity": 60000000,
+    "total_revenue": 20000000,
+    "total_expenses": 5000000,
+    "net_income": -30000000,
+    "period": {
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31"
+    }
+  }
+}
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+## 🎨 Komponen Utama
 
-### Advanced Configuration
+### AccountSummary Component
+```javascript
+// State management
+const [summary, setSummary] = useState([]);
+const [financialSummary, setFinancialSummary] = useState(null);
+const [loading, setLoading] = useState(true);
+const [filters, setFilters] = useState({
+  account_type: '',
+  show_inactive: false
+});
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+// API calls
+const summaryResponse = await summaryAPI.getAll(filters);
+const financialResponse = await summaryAPI.financialSummary(filters);
+```
 
-### Deployment
+### API Service
+```javascript
+export const summaryAPI = {
+  getAll: async (params = {}) => {
+    const response = await api.get('/account-summary', { params });
+    return response.data;
+  },
+  financialSummary: async (params = {}) => {
+    const response = await api.get('/account-summary/financial', { params });
+    return response.data;
+  }
+};
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+## 🔐 Error Handling
 
-### `npm run build` fails to minify
+### Frontend Error Handling
+```javascript
+try {
+  const response = await summaryAPI.getAll(filters);
+  setSummary(response.data || []);
+} catch (error) {
+  toast({
+    title: "Error",
+    description: error.response?.data?.message || "Gagal memuat data ringkasan",
+    variant: "destructive",
+  });
+} finally {
+  setLoading(false);
+}
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+### Backend Error Response Format
+```json
+{
+  "success": false,
+  "message": "Error message dari backend",
+  "data": null
+}
+```
+
+## 🎨 Styling
+
+### Tailwind CSS Classes
+```javascript
+// Card styling
+<Card className="bg-white shadow-lg">
+  <CardHeader>
+    <CardTitle className="text-lg font-semibold">Title</CardTitle>
+  </CardHeader>
+  <CardContent>
+    <div className="text-2xl font-bold text-blue-600">
+      Rp 1.000.000
+    </div>
+  </CardContent>
+</Card>
+
+// Table styling
+<Table className="w-full">
+  <TableHeader>
+    <TableRow>
+      <TableHead>Akun</TableHead>
+      <TableHead className="text-right">Saldo</TableHead>
+    </TableRow>
+  </TableHeader>
+  <TableBody>
+    {/* Table rows */}
+  </TableBody>
+</Table>
+```
+
+## 🔄 Development Workflow
+
+### 1. Setup Environment
+```bash
+# Backend
+cd sistem_keuangan_BE
+php artisan serve --host=127.0.0.1 --port=8000
+
+# Frontend
+cd sistem_keuangan_fe
+npm start
+```
+
+### 2. Development Tips
+- Gunakan browser dev tools untuk debugging
+- Monitor network tab untuk API calls
+- Check console untuk error messages
+- Gunakan React DevTools untuk component inspection
+
+## 🐛 Troubleshooting
+
+### Common Issues & Solutions
+
+#### 1. API Connection Error
+**Problem:** `Failed to load resource: the server responded with a status of 500`
+
+**Solutions:**
+- Check backend server is running
+- Verify API URL in .env file
+- Check CORS configuration
+- Monitor Laravel logs: `php artisan log:tail`
+
+#### 2. Data Not Displaying
+**Problem:** Cards showing 0 values
+
+**Solutions:**
+- Check if backend returns data
+- Verify API response structure
+- Check if transactions exist in database
+- Run database seeder: `php artisan db:seed`
+
+#### 3. Method Not Found
+**Problem:** `Call to undefined method`
+
+**Solutions:**
+- Verify method name in API call
+- Check route definition in routes/api.php
+- Clear route cache: `php artisan route:clear`
+
+## 📦 Deployment
+
+### Build for Production
+```bash
+# Build optimized version
+npm run build
+
+# Output akan ada di folder /build
+```
+
+### Environment Setup
+```bash
+# Production
+REACT_APP_API_URL=https://your-domain.com/api
+
+# Development
+REACT_APP_API_URL=http://localhost:8000/api
+```
+
+## 🤝 Contributing
+
+### Guidelines
+1. Follow existing code style
+2. Add proper error handling
+3. Include comments for complex logic
+4. Update documentation for new features
+5. Test thoroughly before committing
+
+### Git Workflow
+```bash
+# Feature branch
+git checkout -b feature/account-summary-improvements
+
+# Commit changes
+git add .
+git commit -m "Improve account summary display"
+
+# Push changes
+git push origin feature/account-summary-improvements
+
+# Merge to main
+git checkout main
+git merge feature/account-summary-improvements
+git push origin main
+```
+
+## 📄 License
+
+MIT License - feel free to use this project for personal or commercial purposes.
+
+---
+
+## 👥 Support
+
+Untuk pertanyaan atau bantuan:
+- Check documentation terlebih dahulu
+- Monitor issues di GitHub Issues
+- Contact development team untuk technical support
+
+**Happy Coding! 🚀**
