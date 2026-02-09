@@ -21,7 +21,7 @@ const Dashboard = () => {
   const loadDashboardData = async () => {
     try {
       // Load financial summary
-      const summaryResponse = await summaryAPI.getFinancial();
+      const summaryResponse = await summaryAPI.financialSummary();
       
       // Load recent transactions
       const transactionsResponse = await transactionsAPI.getAll();
@@ -29,7 +29,7 @@ const Dashboard = () => {
       // Load account statistics
       const accountsResponse = await accountsAPI.getAll();
 
-      setSummary(summaryResponse);
+      setSummary(summaryResponse.data);
       setRecentTransactions(transactionsResponse.data?.transactions?.slice(0, 5) || []);
       setAccountStats(accountsResponse.data?.accounts || []);
     } catch (error) {
@@ -202,7 +202,7 @@ const Dashboard = () => {
               <Button 
                 variant="outline" 
                 className="h-20 flex flex-col"
-                onClick={() => navigate('/transactions')}
+                onClick={() => navigate('/dashboard/transactions')}
               >
                 <Receipt className="h-6 w-6 mb-2" />
                 <span>Buat Transaksi</span>
@@ -210,7 +210,7 @@ const Dashboard = () => {
               <Button 
                 variant="outline" 
                 className="h-20 flex flex-col"
-                onClick={() => navigate('/accounts')}
+                onClick={() => navigate('/dashboard/accounts')}
               >
                 <Wallet className="h-6 w-6 mb-2" />
                 <span>Tambah Akun</span>
@@ -218,19 +218,12 @@ const Dashboard = () => {
               <Button 
                 variant="outline" 
                 className="h-20 flex flex-col"
-                onClick={() => navigate('/account-summary')}
+                onClick={() => navigate('/dashboard/summary')}
               >
                 <TrendingUp className="h-6 w-6 mb-2" />
                 <span>Lihat Ringkasan</span>
               </Button>
-              <Button 
-                variant="outline" 
-                className="h-20 flex flex-col"
-                onClick={() => navigate('/transactions')}
-              >
-                <Users className="h-6 w-6 mb-2" />
-                <span>Laporan</span>
-              </Button>
+             
             </div>
           </CardContent>
         </Card>

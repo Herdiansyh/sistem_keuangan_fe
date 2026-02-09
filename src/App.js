@@ -73,9 +73,9 @@ function App() {
             }
           >
             <Route index element={<Dashboard />} />
-            <Route path="accounts" element={<Accounts />} />
-            <Route path="transactions" element={<Transactions />} />
-            <Route path="summary" element={<AccountSummary />} />
+            <Route path="/dashboard/accounts" element={<Accounts />} />
+            <Route path="/dashboard/transactions" element={<Transactions />} />
+            <Route path="/dashboard/summary" element={<AccountSummary />} />
           </Route>
           
           {/* Default redirect */}

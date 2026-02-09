@@ -29,7 +29,7 @@ const AccountSummary = () => {
       
       // Load hierarchical account summary
       const summaryResponse = await summaryAPI.getAll(filters);
-      setSummary(summaryResponse.data || []);
+      setSummary(summaryResponse.data.accounts || []);
       
       // Load financial summary
       const financialResponse = await summaryAPI.financialSummary(filters);
@@ -37,7 +37,7 @@ const AccountSummary = () => {
       
       // Load top accounts
       const topAccountsResponse = await summaryAPI.getTopAccounts(filters);
-      setTopAccounts(topAccountsResponse.data || []);
+      setTopAccounts(topAccountsResponse.data.accounts || []);
       
     } catch (error) {
       toast({
